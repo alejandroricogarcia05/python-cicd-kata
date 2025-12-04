@@ -1,5 +1,5 @@
-name: Code Quality
-run-name: ${{ github.actor }} is checking code quality
+name: 🔎 Code Safety
+run-name: Running Code Safety for ${{ github.ref }} on ${{ github.event_name }} 🔎
 
 on:
   pull_request:
@@ -12,20 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v3
 
-      - name: Install the project
-        run: uv sync --locked --all-extras --dev
+      - run: uv sync --locked
         shell: bash
 
-      - name: Check linter
-        run: uv run ruff check app tests
+      - run: uv run ruff check .
         shell: bash
 
   check-formatter:
@@ -33,20 +29,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v3
 
-      - name: Install the project
-        run: uv sync --locked --all-extras --dev
+      - run: uv sync --locked
         shell: bash
 
-      - name: Check formatter
-        run: uv run ruff format --check app tests
+      - run: uv run ruff format .
         shell: bash
 
   check-type-safety:
@@ -54,20 +46,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v3
 
-      - name: Install the project
-        run: uv sync --locked --all-extras --dev
+      - run: uv sync --locked
         shell: bash
 
-      - name: Check type safety
-        run: uv run pyright
+      - run: uv run pyright
         shell: bash
 
   run-unit-tests:
@@ -75,18 +63,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v3
 
-      - name: Install the project
-        run: uv sync --locked --all-extras --dev
+      - run: uv sync --locked
         shell: bash
 
-      - name: Run unit tests
-        run: uv run pytest tests
+      - run: uv run pytest
         shell: bash
