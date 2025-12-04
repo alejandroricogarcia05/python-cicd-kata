@@ -29,7 +29,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/simple-service:latest
+          tags: ${{ secret.DOCKERHUB_USERNAME }}/simple-service:latest
 
   deploy:
     needs: push-to-registry
