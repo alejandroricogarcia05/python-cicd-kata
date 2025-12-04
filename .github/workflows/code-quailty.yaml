@@ -23,20 +23,48 @@ jobs:
       - name: Install the project
         run: uv sync --locked --all-extras --dev
         shell: bash
+  check-linter:
+     runs-on: ubuntu-latest
+     steps:
+     - uses: actions/checkout@v4
 
-      - name: Check linter
-        run: uv run ruff check app tests
-        shell: bash
+     - uses: ./.github/actions/setup-python-uv
 
-      - name: Check formatter
-        run: uv run ruff format --check app tests
-        shell: bash
+     - run: uv run ruff check .
 
-      - name: Check type safety
-        run: uv run mypy app
-        shell: bash
+     - uses: ./.github/actions/minimize-uv-cache
 
-      - name: Run unit tests
-        run: uv run pytest tests
-        shell: bash
+  check-formatter:
+     runs-on: ubuntu-latest
+     steps:
+     - uses: actions/checkout@v4
+
+     - uses: ./.github/actions/setup-python-uv
+
+     - run: uv run ruff format .
+
+     - uses: ./.github/actions/minimize-uv-cache
+
+  check-type-safety:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v4
+
+     - uses: ./.github/actions/setup-python-uv
+
+     - run: uv run pyright
+
+     - uses: ./.github/actions/minimize-uv-cache
+
+  run-unit-tests:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v4
+
+     - uses: ./.github/actions/setup-python-uv
+
+     - run: uv run pytest
+
+     - uses: ./.github/actions/minimize-uv-cache
+
 
