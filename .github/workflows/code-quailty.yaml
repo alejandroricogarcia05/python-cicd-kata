@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  code-safety:
+  check-linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,48 +23,70 @@ jobs:
       - name: Install the project
         run: uv sync --locked --all-extras --dev
         shell: bash
-  check-linter:
-     runs-on: ubuntu-latest
-     steps:
-     - uses: actions/checkout@v4
 
-     - uses: ./.github/actions/setup-python-uv
-
-     - run: uv run ruff check .
-
-     - uses: ./.github/actions/minimize-uv-cache
+      - name: Check linter
+        run: uv run ruff check app tests
+        shell: bash
 
   check-formatter:
-     runs-on: ubuntu-latest
-     steps:
-     - uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-     - uses: ./.github/actions/setup-python-uv
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
 
-     - run: uv run ruff format .
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
 
-     - uses: ./.github/actions/minimize-uv-cache
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+        shell: bash
+
+      - name: Check formatter
+        run: uv run ruff format --check app tests
+        shell: bash
 
   check-type-safety:
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-     - uses: ./.github/actions/setup-python-uv
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
 
-     - run: uv run pyright
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
 
-     - uses: ./.github/actions/minimize-uv-cache
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+        shell: bash
+
+      - name: Check type safety
+        run: uv run mypy app
+        shell: bash
 
   run-unit-tests:
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-     - uses: ./.github/actions/setup-python-uv
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
 
-     - run: uv run pytest
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
 
-     - uses: ./.github/actions/minimize-uv-cache
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+        shell: bash
 
-
+      - name: Run unit tests
+        run: uv run pytest tests
+        shell: bash
