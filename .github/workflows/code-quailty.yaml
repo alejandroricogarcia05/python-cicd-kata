@@ -67,7 +67,7 @@ jobs:
         shell: bash
 
       - name: Check type safety
-        run: uv run mypy app
+        run: uv run pyright
         shell: bash
 
   run-unit-tests:
