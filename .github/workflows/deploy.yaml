@@ -24,15 +24,15 @@ jobs:
         shell: bash
       
       - name: Check linter
-        run: uv run ruff check src tests
+        run: uv run ruff check app tests
         shell: bash
       
       - name: Check formatter
-        run: uv run ruff format --check src tests
+        run: uv run ruff format --check app tests
         shell: bash
       
       - name: Check type safety
-        run: uv run mypy src
+        run: uv run mypy app
         shell: bash
       
       - name: Run unit tests
